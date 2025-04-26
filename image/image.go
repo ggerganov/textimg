@@ -66,9 +66,9 @@ func init() {
 func NewImage(p *ImageParam) *Image {
 	var (
 		charWidth   = p.FontSize / 2
-		charHeight  = int(float64(p.FontSize) * 1.1)
+		charHeight  = int(float64(p.FontSize) * 1.2)
 		imageWidth  = p.BaseWidth * charWidth
-		imageHeight = p.BaseHeight * charHeight
+		imageHeight = int(float64(p.BaseHeight*charHeight) / 1.2)
 	)
 
 	var animationImageFlameHeight int
@@ -171,6 +171,7 @@ func (i *Image) drawBackgroundAll() {
 
 func (i *Image) updateColor(t token.ColorType, col color.RGBA) {
 	switch t {
+	case token.ColorTypeBold:
 	case token.ColorTypeReset:
 		i.resetColor()
 	case token.ColorTypeResetForeground:
@@ -181,6 +182,8 @@ func (i *Image) updateColor(t token.ColorType, col color.RGBA) {
 		i.foregroundColor, i.backgroundColor = i.backgroundColor, i.foregroundColor
 	case token.ColorTypeForeground:
 		i.foregroundColor = c.RGBA(col)
+		//r, g, b, a := i.foregroundColor.RGBA()
+		//println("Red: %d, Green: %d, Blue: %d, Alpha: %d\n", r/256, g/256, b/256, a/256)
 	case token.ColorTypeBackground:
 		i.backgroundColor = c.RGBA(col)
 	}
@@ -308,7 +311,7 @@ func (i *Image) moveRight(r rune) {
 
 func (i *Image) moveDown() {
 	i.x = 0
-	i.y += i.charHeight
+	i.y += int(0.75 * float64(i.charHeight))
 	i.lineCount++
 }
 
